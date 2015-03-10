@@ -1,4 +1,4 @@
-function ForKin( pos, theta, a0, a1, a2, d0 )
+function ForKin( pos, theta, a0, a1, a2, d0, test )
 %FORKIN Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -20,13 +20,20 @@ ManipX=[0 Xo X1 Xe];
 ManipY=[0 Yo Y1 Ye]; 
 ManipZ=[0 Zo Z1 Ze]; 
 
-hold off
+
+if(test)
+h=plot3(ManipX,ManipY,ManipZ,'c--o', Xe,Ye,Ze,'b--x', pos(1), pos(2), pos(3), 'g--+'); 
+else 
 h=plot3(ManipX,ManipY,ManipZ,'r--o', Xe,Ye,Ze,'b--x', pos(1), pos(2), pos(3), 'g--+'); 
+
+end
 hold on
-plot3( 0, 0, 0, 'k^','MarkerFaceColor',[.49 1 .63],'MarkerSize',10)
+plot3( [0 Xo],[0 Yo], [0 Zo], 'k--o',0, 0, 0, 'k^','MarkerFaceColor',[.49 1 .63],'MarkerSize',10)
 daspect([1 1 1]);
 axis('square')
-axis([0 30 0 30 0 30])
+axis([-10 30 -10 30 0 30])
 grid on
+view([90 0]);
+
 end
 
