@@ -10,6 +10,7 @@ X1=-sin(theta(3))*(a1*cos(theta(1)));
 Y1=cos(theta(3))*(a1*cos(theta(1))); 
 Z1=a0+a1*sin(theta(1)); 
 
+Lmax=a0+a1+a2; 
 
 Xe= -sin(theta(3))*(a1*cos(theta(1))+a2*cos(theta(1)+theta(2))); 
 Ye= cos(theta(3))*(a1*cos(theta(1))+a2*cos(theta(1)+theta(2))); 
@@ -31,7 +32,7 @@ hold on
 plot3( [0 Xo],[0 Yo], [0 Zo], 'k--o',0, 0, 0, 'k^','MarkerFaceColor',[.49 1 .63],'MarkerSize',10)
 daspect([1 1 1]);
 axis('square')
-axis([-10 30 -10 30 0 30])
+axis([-.1*Lmax Lmax -.1*Lmax Lmax -.1*Lmax Lmax])
 grid on
 view([90 0]);
 

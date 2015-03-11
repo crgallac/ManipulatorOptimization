@@ -1,28 +1,28 @@
-a0=200; 
-a1=150;
-a2=200;
+a0=.1; 
+a1=.1;
+a2=.1;
 d0=0; 
 d=d0; 
-Ro=10;
-Ri=5;
-rho=2.699; %aluminum g/cm^3
-Mmot1=100;
-Mmot2=50; 
-Mgrip= 50; 
+Ro=.010;
+Ri=.005;
+rho=2699; %aluminum 2.7 g/cm^3
+Mmot1=.150;
+Mmot2=.050; 
+Mgrip= .050; 
 
 
 param=[a0 a1 a2 Ro Ri rho Mmot1 Mmot2 Mgrip];
 
 %%
-% pos=[0 6 1]; 
+% pos=[0 .15 .05]; 
 % % 
 %          [theta_up, theta_down]= InvKin1(pos, a0, a1, a2, d0);
 %         hold off
 %           ForKin(pos,theta_up, a0, a1, a2, d0, 1); 
 %          hold on
 %           ForKin(pos,theta_down, a0, a1, a2, d-2, 0); 
-
-%%
+% waitforbuttonpress
+%
 n=200; 
 Lmax=1.05*(a0+a1+a2); 
 
@@ -69,18 +69,22 @@ for i=1:n
         KappaM_up=KinematicManip(J_up); 
         
         %returns the mass matrix for up configuration
-         M_up=MassMatrix(theta_up,param); 
-         KappaD_up=KappaM_up/abs(det(M_up)); 
-         
+         M_up=MassMatrix(theta_up,param);
+
+%          KappaD_up=KappaM_up/abs(det(M_up));
+            KappaD_up=DynamicManip(M_up); 
+%             KappaD_up=KappaM_up/KappaD_up;
         
         %returns the jacobian for the down configuration
         J_down= Jacobian(theta_down, param);
         KappaM_down=KinematicManip(J_down); 
         
         %returns the mass matrix for down configuration
-         M_down=MassMatrix(theta_down,param); 
-         KappaD_down=KappaM_down/abs(det(M_down)); 
-        
+         M_down=MassMatrix(theta_down,param);
+      
+%          KappaD_down=KappaM_down/abs(det(M_down)); 
+          KappaD_down=DynamicManip(M_down); 
+%          KappaD_down=KappaM_up/KappaD_down;
 
          if(KappaM_up<KappaM_down) KappaM=KappaM_up; 
          else KappaM=KappaM_down;
@@ -93,12 +97,14 @@ for i=1:n
             KAPPAM(j,i,k)=KappaM;      
             KAPPAD(j,i,k)=KappaD; 
             
+           
+            
 %          %% Draws the manipulator configuration
 %          hold off
 %           ForKin([X(j,i,k),Y(j,i,k),Z(j,i,k)],theta_up, a0, a1, a2, d0, 1); 
 %          hold on
 %           ForKin([X(j,i,k),Y(j,i,k),Z(j,i,k)],theta_down, a0, a1, a2, d0, 0); 
-%           pause(.01)
+%           pause(.01); 
 % % %      waitforbuttonpress
 % %%
     else
@@ -127,8 +133,14 @@ len= Length(param);
 GDMI= GlobalDynManInd(KAPPAD1, volume); 
 GKMI= GlobalKinManInd(KAPPAM1, volume); 
 
+mi=min(min(KAPPAD1));
 
+KAPPAD1(KAPPAD1>10*mi)=10*mi; 
+KAPPAD1(KAPPAD1>10*mi)=10*mi; 
 
+contourf(Y1,Z1,KAPPAD1);
+waitforbuttonpress
+contourf(Y1,Z1,KAPPAM1);
 %%
 
 

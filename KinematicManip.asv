@@ -3,14 +3,11 @@ function [ KappaM ] = KinematicManip( J )
 %   Detailed explanation goes here
 % KappaM=abs(det(J)); 
 
-[U,S,V] =svd(J);
+lambda=svd(J);
+svd(
 
-S=S.^(1/2);
 
-% KappaM=abs(det(S)); 
-
-%new index (the trace times the condition number)
-KappaM=abs(trace(S)*1/((S(1,1)/S(3,3)))); 
+KappaM=abs(lambda(1)*lambda(2)*lambda(3)); 
 
 
 end
