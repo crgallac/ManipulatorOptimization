@@ -3,20 +3,26 @@ function [ M ] = MassMatrix( theta, param )
 %   Detailed explanation goes here
 phi=theta;
 
-%param=[a0 a1 a2 Ro Ri rho Mmot1 Mmot2 Mgrip]
+%param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip]
+g=9.8; 
+a=2; 
 
 a0=param(1); 
 a1=param(2);
 a2=param(3); 
-Ro=param(4);
-Ri=param(5);
-rho=param(6);
-Mmot1=param(7);
-Mmot2=param(8); 
-Mgrip=param(9); 
+Ro0=param(4);
+Ri0=param(5);
+Ro1=param(6);
+Ri1=param(7);
+Ro2=param(8);
+Ri2=param(9);
+rho=param(10);
+Mmot1=param(11);
+Mmot2=param(12); 
+Mgrip=param(13);
 
-m0=rho*pi*(Ro^2-Ri^2)*a0; 
-m1=rho*pi*(Ro^2-Ri^2)*a1; 
+m0=rho*pi*(Ro0^2-Ri0^2)*a0; 
+m1=rho*pi*(Ro1^2-Ri^2)*a1; 
 m2=rho*pi*(Ro^2-Ri^2)*a2;
 
 IG0=1/2*m0*(Ro^2+Ri^2); 
@@ -39,12 +45,12 @@ M = [m1 * cos(phi(1)) ^ 2 * a1 ^ 2 / 0.4e1 + IG0 + IG1 + m2 * cos(phi(1)) * cos(
 % % 
 J= Jacobian(theta,param);
 % % 
-size(J
-Minv=M\; 
+[m,n]=size(J);
+Minv=M\eye(m,n); 
 % % 
 % % % %%% (J*M^-1*J')^-1
-% Meff=(J*Minv*J')/eye(2,2);
-% M=Meff;
+Meff=(J*Minv*J')/eye(m,n);
+M=Meff;
 % % waitforbuttonpress
 %  M=inv(J)'*M*inv(J);
 

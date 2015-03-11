@@ -3,15 +3,19 @@ a1=.1;
 a2=.1;
 d0=0; 
 d=d0; 
-Ro=.010;
-Ri=.005;
+Ro0=.010;
+Ri0=.005;
+Ro1=0.010; 
+Ri1=.005; 
+Ro2=.010;
+Ri2=.005;
 rho=2699; %aluminum 2.7 g/cm^3
 Mmot1=.150;
 Mmot2=.050; 
 Mgrip= .050; 
 
 
-param=[a0 a1 a2 Ro Ri rho Mmot1 Mmot2 Mgrip];
+param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip];
 
 %%
 % pos=[0 .15 .05]; 
@@ -134,9 +138,13 @@ GDMI= GlobalDynManInd(KAPPAD1, volume);
 GKMI= GlobalKinManInd(KAPPAM1, volume); 
 
 mi=min(min(KAPPAD1));
+mi1=max(max(KAPPAM1)); 
 
-KAPPAD1(KAPPAD1>10*mi)=10*mi; 
-KAPPAD1(KAPPAD1>10*mi)=10*mi; 
+%colormap threshold 
+sf=3; 
+
+KAPPAD1(KAPPAD1>sf*mi)=sf*mi; 
+KAPPAD1(KAPPAM1<mi1/sf)=mi1/sf; 
 
 contourf(Y1,Z1,KAPPAD1);
 waitforbuttonpress

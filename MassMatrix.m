@@ -3,23 +3,29 @@ function [ M ] = MassMatrix( theta, param )
 %   Detailed explanation goes here
 phi=theta;
 
-%param=[a0 a1 a2 Ro Ri rho Mmot1 Mmot2 Mgrip]
+%param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip]
+g=9.8; 
+a=2; 
 
 a0=param(1); 
 a1=param(2);
 a2=param(3); 
-Ro=param(4);
-Ri=param(5);
-rho=param(6);
-Mmot1=param(7);
-Mmot2=param(8); 
-Mgrip=param(9); 
+Ro0=param(4);
+Ri0=param(5);
+Ro1=param(6);
+Ri1=param(7);
+Ro2=param(8);
+Ri2=param(9);
+rho=param(10);
+Mmot1=param(11);
+Mmot2=param(12); 
+Mgrip=param(13);
 
-m0=rho*pi*(Ro^2-Ri^2)*a0; 
-m1=rho*pi*(Ro^2-Ri^2)*a1; 
-m2=rho*pi*(Ro^2-Ri^2)*a2;
+m0=rho*pi*(Ro0^2-Ri0^2)*a0; 
+m1=rho*pi*(Ro1^2-Ri1^2)*a1; 
+m2=rho*pi*(Ro2^2-Ri2^2)*a2;
 
-IG0=1/2*m0*(Ro^2+Ri^2); 
+IG0=1/2*m0*(Ro0^2+Ri0^2); 
 IG1=1/12*m1*a1^2;
 IG2=1/12*m2*a2^2; 
 
