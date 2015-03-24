@@ -40,6 +40,8 @@ t1=TauMax(V1max,Ro1,Ri1);
 t2=TauMax(V2max,Ro2,Ri2); 
 
 
+
+
 %constraint 1
 
 end
