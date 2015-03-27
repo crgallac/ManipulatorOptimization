@@ -33,7 +33,7 @@ param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f
 %
 
 Lmax=1.05*(a0+a1+a2); 
-n=ceil(100*Lmax); 
+n=100*Lmax; ceiling(
 distance=Lmax/n; 
 
 x=linspace(Lmax/n,Lmax+Lmax/n,n); 
@@ -115,8 +115,8 @@ for i=1:n
          hold on
           ForKin([X(j,i,k),Y(j,i,k),Z(j,i,k)],theta_down, a0, a1, a2, d0, 0); 
           pause(.01); 
-     waitforbuttonpress
-%%
+% % %      waitforbuttonpress
+% %%
     else
    
       LogicMap(j,i,k)=0; 
@@ -138,10 +138,10 @@ X1=squeeze(X); Y1=squeeze(Y); Z1=squeeze(Z); LogicMap1=squeeze(LogicMap); KAPPAM
 % %  set(h, 'gridlines', 'off'); 
 %% Cost Function Processing
 
-volume= Volume( LogicMap1, distance );
-len= Length(param);
-GDMI= GlobalDynManInd(KAPPAD1, volume);
-GKMI= GlobalKinManInd(KAPPAM1, volume) ;
+volume= Volume( LogicMap1 )
+len= Length(param)
+GDMI= GlobalDynManInd(KAPPAD1, volume)
+GKMI= GlobalKinManInd(KAPPAM1, volume) 
 
 mi=min(min(KAPPAD1));
 mi1=max(max(KAPPAM1)); 

@@ -37,13 +37,13 @@ param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f
 
 
 fval_old=inf; 
-for i=1:7  
-   for j=1:4
-       for k=1:4
+% for i=1:7  
+%    for j=1:4
+%        for k=1:4
            
-% i=3;
-% j=2;
-% k=2; 
+i=1;
+j=1;
+k=4; 
            %assign values to the parameters
        [failureStress, rho] =MaterialProperties(i) ; %aluminum 2.7 g/cm^3 [this will be a set] 
        [Mmot1, f1]=MotorCharacterization(j);
@@ -69,6 +69,6 @@ if(fval<fval_old)
     config=[i,j,k]; 
 end
 
-       end
-   end   
-end
+%        end
+%    end   
+% end
