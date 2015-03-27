@@ -1,25 +1,4 @@
-
-a0=.1; 
-a1=.1;
-a2=.1;
-d0=0; 
-d=d0; 
-Ro0=.010;
-Ri0=.005;
-Ro1=0.010; 
-Ri1=.005; 
-Ro2=.010;
-Ri2=.005;
-[failureStress, rho] =MaterialProperties(1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
-% Mmot1=.150;
-% Mmot2=.050; 
-Mgrip= .050; 
-[Mmot1, f1]=MotorCharacterization(1);
-[Mmot2, f2]=MotorCharacterization(1); 
-
-
-
-param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
+function [volume, len, GDMI, GKMI]= objFun2(paramVars, param1)
 
 %%
 % pos=[0 .15 .05]; 
@@ -31,12 +10,36 @@ param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f
 %           ForKin(pos,theta_down, a0, a1, a2, d-2, 0); 
 % waitforbuttonpress
 %
-n=200; 
+
+param=[paramVars, param1];
+d=0;
+d0=0;
+
+a0=param(1); 
+a1=param(2);
+a2=param(3); 
+Ro0=param(4);
+Ri0=param(5);
+Ro1=param(6);
+Ri1=param(7);
+Ro2=param(8);
+Ri2=param(9);
+rho=param(10);
+Mmot1=param(11);
+Mmot2=param(12); 
+Mgrip=param(13); 
+failureStress= param(14); 
+f1=param(15);
+f2=param(16);
+
+n=30; 
 Lmax=1.05*(a0+a1+a2); 
 
 x=linspace(Lmax/n,Lmax+Lmax/n,n); 
 y=linspace(Lmax/n,Lmax+Lmax/n,n);
 z=linspace(Lmax/n,Lmax+Lmax/n,n); 
+
+distance=x(2)-x(1); 
 
 [X,Y,Z]=meshgrid(0,y,z); 
 
@@ -136,10 +139,10 @@ X1=squeeze(X); Y1=squeeze(Y); Z1=squeeze(Z); LogicMap1=squeeze(LogicMap); KAPPAM
 %  set(h, 'gridlines', 'off'); 
 %% Cost Function Processing
 
-volume= Volume( LogicMap1 )
-len= Length(param)
-GDMI= GlobalDynManInd(KAPPAD1, volume)
-GKMI= GlobalKinManInd(KAPPAM1, volume) 
+volume= Volume( LogicMap1 , distance);
+len= Length(param);
+GDMI= GlobalDynManInd(KAPPAD1, volume);
+GKMI= GlobalKinManInd(KAPPAM1, volume) ;
 
 mi=min(min(KAPPAD1));
 mi1=max(max(KAPPAM1)); 
@@ -149,10 +152,12 @@ sf=3;
 
 % KAPPAD1(KAPPAD1>sf*mi)=sf*mi; 
 % KAPPAD1(KAPPAM1<mi1/sf)=mi1/sf; 
-% 
+% % 
 % contourf(Y1,Z1,KAPPAD1);
 % waitforbuttonpress
 % contourf(Y1,Z1,KAPPAM1);
 %%
 
-f=volume/20027+len/0.1732+GDMI/28.76+GKMI/0.484; 
+% fval=-volume+len+GDMI-GKMI; 
+% fval=-volume+ len;
+% fval=-volume+len+GDMI-GKMI; 

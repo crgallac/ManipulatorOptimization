@@ -4,7 +4,9 @@ function [ GDMI ] = GlobalDynManInd( Kd, volume )
 
 Kd(isnan(Kd))=0; %matrix A determines which entries of Km are not NaN
 
-KdTot=sum(sum(Kd)); 
+
+KdTot=sum(sum(Kd));
+
 
 GDMI=KdTot/volume; 
 
