@@ -1,4 +1,4 @@
-function [volume, len, GDMI, GKMI]= objFun2(paramVars, param1)
+function [volume, len, GDMI, GKMI, totalMass]= objFun2(paramVars, param1)
 
 %%
 % pos=[0 .15 .05]; 
@@ -143,6 +143,7 @@ volume= Volume( LogicMap1 , distance);
 len= Length(param);
 GDMI= GlobalDynManInd(KAPPAD1, volume);
 GKMI= GlobalKinManInd(KAPPAM1, volume) ;
+totalMass=netMass(param); 
 
 mi=min(min(KAPPAD1));
 mi1=max(max(KAPPAM1)); 

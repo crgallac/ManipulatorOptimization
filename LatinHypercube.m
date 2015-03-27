@@ -29,10 +29,17 @@ volume=zeros([1,1000]);
 len=volume;
 GDMI=volume;
 GKMI=volume;
+totalMass=volume; 
 
 for i=1:1000
 
 r=rand([1,9]).*ub; 
+if(r(2)==0)
+    r(2)=.00001; 
+end 
+if(r(3)==0)
+    r(3)=.00001; 
+end
 
 r1= randi(7,1); 
 r2=randi(4,1); 
@@ -49,7 +56,7 @@ param(10:16)= [rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
         x=param(1:9);
         p=[rho Mmot1 Mmot2 Mgrip failureStress f1 f2]; 
         
-   [volume(i), len(i), GDMI(i), GKMI(i)]=objFun2(x,p); 
+   [volume(i), len(i), GDMI(i), GKMI(i), totalMass(i)]=objFun2(x,p); 
   
   
    

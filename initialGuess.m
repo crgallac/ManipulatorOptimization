@@ -35,7 +35,7 @@ rmax=0.025;
 
 lb=[0 .01 0.01 .001 0 0.001 0 0.001 0];
 ub=[.4 .2 .2 rmax rmax rmax rmax rmax rmax]; 
-
+iguess=[.2 .1 .15 rmax rmax-.01 rmax rmax-.01 rmax rmax-.01]; 
 
 r=rand([1,9]).*ub; 
 
@@ -47,21 +47,21 @@ r3=randi(2,1);
 [Mmot1, f1]=MotorCharacterization(r2);
 [Mmot2, f2]=MotorCharacterization(r3); 
 
-param(1:9)=r; 
+param(1:9)=iguess; 
 param(10:16)= [rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
         
 
-param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
+% param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
 
 
 fval_old=inf; 
-for i=1:3 
-   for j=1:2
-       for k=1:2
+% for i=1:3 
+%    for j=1:2
+%        for k=1:2
            
-% i=3;
-% j=2;
-% k=2; 
+i=3;
+j=1;
+k=1; 
            %assign values to the parameters
        [failureStress, rho] =MaterialProperties(i) ; %aluminum 2.7 g/cm^3 [this will be a set] 
        [Mmot1, f1]=MotorCharacterization(j);
@@ -77,21 +77,7 @@ for i=1:3
         
         
         
-       options = optimoptions('fmincon','Algorithm','interior-point','Display', 'iter', 'MaxFunEvals', 3000, 'MaxIter', 1000,'PlotFcns', @optimplotx, 'TypicalX', [.1 .1 .1 .05 .01 .05 .01 .05 .01],'DiffMinChange', .00001);% 'TolFun', 1e-3, 'TolX', 1e-3 
+       options = optimoptions('fmincon','Algorithm','sqp','Display', 'iter', 'MaxFunEvals', 3000, 'MaxIter', 1000,'PlotFcns', @optimplotx, 'TypicalX', [.1 .1 .1 .05 .01 .05 .01 .05 .01],'DiffMinChange', .00001,'TolFun', 1e-3,'TolX', 1e-3);% 'TolFun', 1e-3, 'TolX', 1e-3 
         [x,fval]= fmincon(f,x0,A,b,[],[],lb,ub,[], options );  %'active-set' 'interior-point'
 %                 [x,fval]= fmincon(f,x0,[],[],[],[],lb,[],[], options );  
 
-xval(i,:)=x; 
-fvalue(i,1)=fval; 
-configuration(i,:)=[i,j,k]; 
-
-
-if(fval<fval_old)
-    
-    fval_old=fval;
-    config=[i,j,k]; 
-end
-
-       end
-   end   
-end

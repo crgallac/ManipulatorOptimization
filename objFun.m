@@ -32,7 +32,7 @@ failureStress= param(14);
 f1=param(15);
 f2=param(16);
 
-n=30; 
+n=50; 
 Lmax=1.05*(a0+a1+a2); 
 
 distance=Lmax/n;
@@ -145,6 +145,7 @@ volume= Volume( LogicMap1 , distance);
 len= Length(param);
 GDMI= GlobalDynManInd(KAPPAD1, volume);
 GKMI= GlobalKinManInd(KAPPAM1, volume) ;
+totalMass=netMass(param); 
 
 mi=min(min(KAPPAD1));
 mi1=max(max(KAPPAM1)); 
@@ -161,5 +162,5 @@ sf=3;
 %%
 
 % fval=-volume+len+GDMI-GKMI; 
-fval=-volume/0.76+len/0.78+GDMI/18681381;
-% fval=-volume/0.76+len/0.78+GDMI/18681381-GKMI/14438;
+% fval=-volume/0.76+len/0.78+GDMI/18681381;
+fval=-volume/0.77+len/0.776+GDMI/48017576+totalMass/0.94;%-GKMI/20297.16
