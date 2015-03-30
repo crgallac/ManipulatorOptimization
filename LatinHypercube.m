@@ -21,7 +21,7 @@ Mgrip= .20;
 
 % size(A)
 lb=[0 .01 .01 .001 0 0.001 0 0.001 0];
-ub=[1 1 1 .05 .049 .05 .049 .05 .049]; 
+ub=[.4 .2 .2 .025 .049 .025 .049 .025 .049]; 
 
 
 param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
@@ -34,16 +34,19 @@ totalMass=volume;
 for i=1:1000
 
 r=rand([1,9]).*ub; 
+r(5)=r(4)-r(4)/10; 
+r(7)=r(6)-r(6)/10; 
+r(9)=r(8)-r(8)/10; 
 if(r(2)==0)
-    r(2)=.00001; 
+    r(2)=.01; 
 end 
 if(r(3)==0)
-    r(3)=.00001; 
+    r(3)=.01; 
 end
 
-r1= randi(7,1); 
-r2=randi(4,1); 
-r3=randi(4,1); 
+r1= randi(3,1); 
+r2=randi(2,1); 
+r3=randi(2,1); 
 
 
 [failureStress, rho] =MaterialProperties(r1) ; %aluminum 2.7 g/cm^3 [this will be a set] 

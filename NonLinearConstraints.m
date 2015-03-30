@@ -26,8 +26,8 @@ failureStress= param(14);
 f1=param(15);
 f2=param(16);
 
-% m0=rho*pi*(Ro^2-Ri^2)*a0; 
-m1=rho*pi*(Ro1^2-Ri1^2)*a1; 
+m0=rho*pi*(Ro0^2-Ri0^2)*a0;
+m1=rho*pi*(Ro1^2-Ri1^2)*a1;
 m2=rho*pi*(Ro2^2-Ri2^2)*a2;
 
 
@@ -48,6 +48,9 @@ t2=TauMax(V2max,Ro2,Ri2);
 
 nonLinConIneqStresses=[s0 s1 s2 t1 t2]; %stresses 
 nonLinConIneqTorques=[M1max M2max]; %torques
+
+% waitforbuttonpress
+
 
 failureStress;
 f1;

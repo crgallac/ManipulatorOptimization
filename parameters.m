@@ -1,4 +1,4 @@
-function [fval]= objFun(paramVars, param1)
+%parameter study
 
 %%
 % pos=[0 .15 .05]; 
@@ -11,7 +11,51 @@ function [fval]= objFun(paramVars, param1)
 % waitforbuttonpress
 %
 
-param=[paramVars, param1];
+s0=3;
+t0=50;
+
+xaxis=linspace(0,1,t0);
+
+fvalParam0=zeros([t0,s0]);
+fvalParam1=fvalParam0;
+fvalParam2=fvalParam0;
+fvalParam3=fvalParam0;
+fvalParam4=fvalParam0;
+fvalParam=fvalParam0;
+
+
+
+rmax=0.025;
+
+
+lb=[0 .01 0.01 .001 0 0.001 0 0.001 0];
+ub=[.2 .15/2 .15/2 rmax rmax-rmax rmax rmax-rmax rmax rmax-rmax];
+
+% r=ub/2; 
+
+r1= 2; 
+r2=2; 
+r3=2; 
+
+
+
+[failureStress, rho] =MaterialProperties(r1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
+[Mmot1, f1]=MotorCharacterization(r2);
+[Mmot2, f2]=MotorCharacterization(r3); 
+
+% s=4
+% while (s<10)
+%     for t=1:t0; 
+    
+
+param(1:9)=ub; 
+param(10:16)= [rho Mmot1 Mmot2 .05 failureStress f1 f2];
+        
+% param(1,s)= t*1/t0*ub(1,s); 
+
+% param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 .05 failureStress f1 f2];
+
+
 d=0;
 d0=0;
 
@@ -24,15 +68,18 @@ Ro1=param(6);
 Ri1=param(7);
 Ro2=param(8);
 Ri2=param(9);
-rho=param(10);
-Mmot1=param(11);
-Mmot2=param(12); 
-Mgrip=param(13); 
-failureStress= param(14); 
-f1=param(15);
-f2=param(16);
+% rho=param(10);
+% Mmot1=param(11);
+% Mmot2=param(12); 
+% Mgrip=param(13); 
+% failureStress= param(14); 
+% f1=param(15);
+% f2=param(16);
 
-n=30; 
+
+
+n=200; 
+
 Lmax=1.05*(a0+a1+a2); 
 
 distance=Lmax/n;
@@ -147,20 +194,48 @@ GDMI= log(GlobalDynManInd(KAPPAD1, volume));
 GKMI= log(GlobalKinManInd(KAPPAM1, volume)) ;
 totalMass=netMass(param); 
 
-% mi=min(min(KAPPAD1));
-% mi1=max(max(KAPPAM1)); 
+mi=min(min(KAPPAD1));
+mi1=max(max(KAPPAM1)); 
 
-%colormap threshold 
-% sf=3; 
+% colormap threshold 
+sf=3; 
 
-% KAPPAD1(KAPPAD1>sf*mi)=sf*mi; 
-% KAPPAD1(KAPPAM1<mi1/sf)=mi1/sf; 
-% % 
-% contourf(Y1,Z1,KAPPAD1);
-% figure
-% contourf(Y1,Z1,KAPPAM1);
-%%
+KAPPAD1(KAPPAD1>sf*mi)=sf*mi; 
+KAPPAD1(KAPPAM1<mi1/sf)=mi1/sf; 
+% 
+contourf(Y1,Z1,KAPPAD1);
+figure
+contourf(Y1,Z1,KAPPAM1);
+%
 
 % fval=-volume+len+GDMI-GKMI; 
 % fval=-volume/0.76+len/0.78+GDMI/18681381;
-fval=-volume/0.0057 +len/0.47+GDMI/14.03+totalMass/1.21-GKMI/18.02; 
+fvalParam0(t,s)=-volume/0.0057;
+fvalParam1(t,s)=len/.47;
+fvalParam2(t,s)=GDMI/14.03;
+fvalParam3(t,s)=totalMass/1.21;
+fvalParam4(t,s)=-GKMI/18.02;
+
+
+% +len/0.776+GDMI/48017576+totalMass/0.94;%-GKMI/20297.16
+
+
+% 
+%     end
+%     s=s+2; 
+% end
+
+% 
+% fvalParam=fvalParam0+fvalParam1+fvalParam2+fvalParam3+fvalParam4; 
+% figure
+% plot(xaxis,fvalParam0(:,4),'r', xaxis,fvalParam0(:,6),'b', xaxis, fvalParam0(:,8),'g')
+% figure
+% plot(xaxis,fvalParam1(:,4),'r', xaxis,fvalParam1(:,6),'b', xaxis, fvalParam1(:,8),'g')
+% figure
+% plot(xaxis,fvalParam2(:,4),'r', xaxis,fvalParam2(:,6),'b', xaxis, fvalParam2(:,8),'g')
+% figure
+% plot(xaxis,fvalParam3(:,4),'r', xaxis,fvalParam3(:,6),'b', xaxis, fvalParam3(:,8),'g')
+% figure
+% plot(xaxis,fvalParam4(:,4),'r', xaxis,fvalParam4(:,6),'b', xaxis, fvalParam4(:,8),'g')
+% figure
+% plot(xaxis,fvalParam(:,4),'r', xaxis,fvalParam(:,6),'b', xaxis, fvalParam(:,8),'g')

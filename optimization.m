@@ -2,23 +2,23 @@
 
 
 
-% a0=0; 
-% a1=.1;
-% a2=.1;
-% d0=0; 
-% d=d0; 
-% Ro0=.005;
-% Ri0=0.001;
-% Ro1=0.005; 
-% Ri1=0.001; 
-% Ro2=.005;
-% Ri2=0.001;
-% [failureStress, rho] =MaterialProperties(1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
-% % Mmot1=.150;
-% % Mmot2=.050; 
-% Mgrip= .050; 
-% [Mmot1, f1]=MotorCharacterization(1);
-% [Mmot2, f2]=MotorCharacterization(1); 
+a0=.3; 
+a1=.2;
+a2=.1;
+d0=0; 
+d=d0; 
+Ro0=.02;
+Ri0=0.01;
+Ro1=0.02; 
+Ri1=0.01; 
+Ro2=.02;
+Ri2=0.01;
+[failureStress, rho] =MaterialProperties(1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
+% Mmot1=.150;
+% Mmot2=.050; 
+Mgrip= .050; 
+[Mmot1, f1]=MotorCharacterization(1);
+[Mmot2, f2]=MotorCharacterization(1); 
 
 A=[ 0 0 0 -1 1 0 0 0 0; 0 0 0 0 0 -1 1 0 0;  0 0 0 0 0 0 0 -1 1;]; 
 
@@ -33,23 +33,25 @@ b= [0;0;0];
 rmax=0.025;
 
 
-lb=[0 .01 0.01 .001 0 0.001 0 0.001 0];
-ub=[.4 .2 .2 rmax rmax rmax rmax rmax rmax]; 
+lb=[0 .01 0.01 rmax/10 0 rmax/10 0 rmax/10 0];
+ub=[.4 .2 .2 rmax rmax-rmax/10 rmax rmax-rmax/10 rmax rmax-rmax/10]; 
 
 
-r=rand([1,9]).*ub; 
+%for different guesses
 
-r1= randi(3,1); 
-r2=randi(2,1); 
-r3=randi(2,1); 
+% r=rand([1,9]).*ub; 
 
-[failureStress, rho] =MaterialProperties(r1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
-[Mmot1, f1]=MotorCharacterization(r2);
-[Mmot2, f2]=MotorCharacterization(r3); 
+% r1= randi(3,1); 
+% r2=randi(2,1); 
+% r3=randi(2,1); 
 
-param(1:9)=r; 
-param(10:16)= [rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
-        
+% [failureStress, rho] =MaterialProperties(r1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
+% [Mmot1, f1]=MotorCharacterization(r2);
+% [Mmot2, f2]=MotorCharacterization(r3); 
+
+% param(1:9)=r; 
+% param(10:16)= [rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
+%         
 
 param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
 
@@ -59,8 +61,8 @@ for i=1:3
    for j=1:2
        for k=1:2
            
-% i=3;
-% j=2;
+% i=2;
+% j=1;
 % k=2; 
            %assign values to the parameters
        [failureStress, rho] =MaterialProperties(i) ; %aluminum 2.7 g/cm^3 [this will be a set] 
@@ -78,12 +80,15 @@ for i=1:3
         
         
        options = optimoptions('fmincon','Algorithm','interior-point','Display', 'iter', 'MaxFunEvals', 3000, 'MaxIter', 1000,'PlotFcns', @optimplotx, 'TypicalX', [.1 .1 .1 .05 .01 .05 .01 .05 .01],'DiffMinChange', .00001);% 'TolFun', 1e-3, 'TolX', 1e-3 
-        [x,fval]= fmincon(f,x0,A,b,[],[],lb,ub,[], options );  %'active-set' 'interior-point'
+        [x,fval, exitflag, output, lambda] = fmincon(f,x0,A,b,[],[],lb,ub,[], options );  %'active-set' 'interior-point'
 %                 [x,fval]= fmincon(f,x0,[],[],[],[],lb,[],[], options );  
 
 xval(i,:)=x; 
 fvalue(i,1)=fval; 
 configuration(i,:)=[i,j,k]; 
+exitflagO(i,1)=exitflag; 
+outputO(i,:)=output;
+lambdaO(i,:)=lambda; 
 
 
 if(fval<fval_old)
