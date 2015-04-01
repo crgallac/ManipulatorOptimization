@@ -6,7 +6,7 @@ param=[paramVars, param1];
 
 %param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip]
 g=9.8; 
-a=2; 
+a=1; 
 sf=1/2; 
 
 a0=param(1); 
@@ -33,10 +33,10 @@ m2=rho*pi*(Ro2^2-Ri2^2)*a2;
 
 
 V1max=-(m1+m2+Mmot2+Mgrip)*(g+a);
-M1max=-((m1/2+Mmot2)*a1+m2*(a1+a2/2)+Mgrip*(a1+a2))*(g+a); 
+M1max=-((m1/2+Mmot2)*a1+m2*(a1+a2/2)+Mgrip*(a1+a2))*(g+a);
 
 V2max=-(m2+Mgrip)*(a+g);
-M2max=-(m2/2+Mgrip)*(a+g)*a2; 
+M2max=-(m2/2+Mgrip)*(a+g)*a2;
 
 s0=SigmaMax(M1max,Ro0,Ri0);
 s1=SigmaMax(M1max,Ro1,Ri1);
@@ -46,8 +46,8 @@ t1=TauMax(V1max,Ro1,Ri1);
 t2=TauMax(V2max,Ro2,Ri2);
 
 
-nonLinConIneqStresses=[s0 s1 s2 t1 t2]; %stresses 
-nonLinConIneqTorques=[M1max M2max]; %torques
+nonLinConIneqStresses=([s0 s1 s2 t1 t2]); %stresses 
+nonLinConIneqTorques=([M1max M2max]); %torques
 
 % waitforbuttonpress
 
@@ -60,6 +60,8 @@ nonLinConIneqStresses=abs(nonLinConIneqStresses)-sf*failureStress;
 nonLinConIneqTorques=abs(nonLinConIneqTorques)-[f1 f2];
 
 nonLinConIneq= [nonLinConIneqStresses, nonLinConIneqTorques];
+
+max(nonLinConIneq);
 nonLinConEq=[]; 
 
 %constraint 1

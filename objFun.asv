@@ -170,16 +170,10 @@ totalMass=netMass(param);
 % f4=-GKMI/18.02
 % f5= totalMass/1.27
 
-GDMI0=14.89;
-GKMI0= 11.88;
-volume0=.00095; 
-totalMass0=.44;
-len0=.269;
-
 
 % fval=-volume+len+GDMI-GKMI; 
 % fval=-volume/0.76+len/0.78+GDMI/18681381;
-fval=-volume/volume0+len/len0+GDMI/GDMI0+totalMass/totalMass0-GKMI/GKMI0; %-GKMI/GKMI0
+fval=-volume/0.000972+GDMI/15.07-GKMI/18.02; 
 
 %GDMI0=14.89
 %GKMI0= 11.88

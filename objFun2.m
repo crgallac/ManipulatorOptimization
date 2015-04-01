@@ -141,8 +141,8 @@ X1=squeeze(X); Y1=squeeze(Y); Z1=squeeze(Z); LogicMap1=squeeze(LogicMap); KAPPAM
 
 volume= Volume( LogicMap1 , distance);
 len= Length(param);
-GDMI= GlobalDynManInd(KAPPAD1, volume);
-GKMI= GlobalKinManInd(KAPPAM1, volume) ;
+GDMI= log(GlobalDynManInd(KAPPAD1, volume));
+GKMI= log(GlobalKinManInd(KAPPAM1, volume)) ;
 totalMass=netMass(param); 
 
 mi=min(min(KAPPAD1));

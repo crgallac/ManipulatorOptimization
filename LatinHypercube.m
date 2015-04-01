@@ -1,27 +1,28 @@
 %Latin Hypercupe
 
-a0=.1; 
-a1=.1;
-a2=.1;
+a0=.05; 
+a1=.015;
+a2=.05;
 d0=0; 
 d=d0; 
-Ro0=.010;
-Ri0=.005;
-Ro1=0.010; 
-Ri1=.005; 
-Ro2=.010;
-Ri2=.005;
+Ro0=.01;
+Ri0=0.005;
+Ro1=0.01; 
+Ri1=0.005; 
+Ro2=.01;
+Ri2=0.005;
 [failureStress, rho] =MaterialProperties(1) ; %aluminum 2.7 g/cm^3 [this will be a set] 
 % Mmot1=.150;
 % Mmot2=.050; 
-Mgrip= .20; 
+Mgrip= .050; 
 [Mmot1, f1]=MotorCharacterization(1);
 [Mmot2, f2]=MotorCharacterization(1); 
 
 
+
 % size(A)
-lb=[0 .01 .01 .001 0 0.001 0 0.001 0];
-ub=[.4 .2 .2 .025 .049 .025 .049 .025 .049]; 
+lb=[0 .05 0.05 0 0 0 0 0 0];
+ub=[.4 .2 .2 rmax rmax rmax rmax rmax rmax]; 
 
 
 param=[a0 a1 a2 Ro0 Ri0 Ro1 Ri1 Ro2 Ri2 rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
@@ -34,14 +35,25 @@ totalMass=volume;
 for i=1:1000
 
 r=rand([1,9]).*ub; 
-r(5)=r(4)-r(4)/10; 
-r(7)=r(6)-r(6)/10; 
-r(9)=r(8)-r(8)/10; 
-if(r(2)==0)
-    r(2)=.01; 
-end 
-if(r(3)==0)
-    r(3)=.01; 
+ %ensures the physical reality of the system. 
+for j=1:9
+   if (r(j)<lb(j) || r(j)<0)
+       r(j)=lb(j);
+       
+   end
+   
+   %ensures the physical reality of the system. 
+   if(r(4)<r(5))
+      r(5)=r(4)+rmax/10;
+   end
+     if(r(6)<r(7))
+      r(6)=r(7)+rmax/10;
+     end 
+    if(r(8)<r(9))
+      r(8)=r(9)+rmax/10;
+   end 
+   
+   
 end
 
 r1= randi(3,1); 
@@ -62,6 +74,7 @@ param(10:16)= [rho Mmot1 Mmot2 Mgrip failureStress f1 f2];
    [volume(i), len(i), GDMI(i), GKMI(i), totalMass(i)]=objFun2(x,p); 
   
   
+   
    
 end
        
